@@ -41,39 +41,14 @@ heap* heapify(int* val, int len, int type)
         memcpy(arr,val,sizeof(int)*len); //copies values of array to heap
         h->len=len;
         printheap(h);
-        while(i>=0)
+        switch(h->type)
         {
-                j=i;
-                while(j<=(len-2)/2) // if value at j contains a child pointer
+        case MIN_HEAP:
+                while(i>=0)
                 {
-                        //Generic construct of heapify
-                        // if(j == (len-2)/2 && j%2 == 0)// if it has only 1 child pointer
-                        // {
-                        //   if(*(arr+j) compare *(arr+len-1))
-                        //     __swap(arr+len-1,arr+j);
-                        //   break;
-                        // }
-                        //
-                        // if(*(arr+2*j+1) compare *(arr+2*j+2))
-                        // {
-                        //   if(*(arr+2*j+1) compare *arr)
-                        //   {
-                        //     __swap(arr,arr+2*j+1);
-                        //     j=2*j+1;
-                        //   }
-                        // }
-                        //
-                        // else
-                        // {
-                        //   if(*(arr+2*j+2) compare *arr)
-                        //   {
-                        //     __swap(arr,arr+2*j+2);
-                        //     j=2*j+2;
-                        //   }
-                        // }
-                        switch(h->type)
+                        j=i;
+                        while(j<(len-2)/2) // if value at j contains a child pointer
                         {
-                        case MIN_HEAP:
                                 if(j == (len-2)/2 && j%2 == 0)// if it has only 1 child pointer
                                 {
                                         if(*(arr+j) > *(arr+len-1))
@@ -92,8 +67,17 @@ heap* heapify(int* val, int len, int type)
                                                 __swap(arr+j,arr+2*j+2);
                                         j=2*j+2;
                                 }
-                                break;
-                        case MAX_HEAP:
+                        }
+                        i--;
+                }
+                break;
+
+        case MAX_HEAP:
+                while(i>=0)
+                {
+                        j=i;
+                        while(j<=(len-2)/2) // if value at j contains a child pointer
+                        {
                                 if(j == (len-2)/2 && j%2 == 0)// if it has only 1 child pointer
                                 {
                                         if(*(arr+j) < *(arr+len-1))
@@ -113,14 +97,13 @@ heap* heapify(int* val, int len, int type)
                                                 __swap(arr+j,arr+2*j+2);
                                         j=2*j+2;
                                 }
-                                break;
-                        default:
-                                printf("Error: Invalid type for heap provided as argument. Choose either MAX_HEAP or MIN_HEAP as an argument for heap type");
-                                return NULL;
                         }
-
+                        i--;
                 }
-                i--;
+                break;
+        default:
+                printf("Error: Invalid type for heap provided as argument. Choose either MAX_HEAP or MIN_HEAP as an argument for heap type");
+                return NULL;
         }
         return h;
 }

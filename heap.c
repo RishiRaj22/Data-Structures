@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
 #include <stdlib.h>
 #define SIZE 10000
 #define MAX_HEAP 1
@@ -18,6 +19,7 @@ void printheap(heap*);
 int add_heap(heap*,int);
 int get_heap(heap*);
 void __swap(int*,int*);
+heap* heapify(int* arr, int len,int type);
 
 heap* initheap(int type)
 {
@@ -28,6 +30,102 @@ heap* initheap(int type)
         return h;
 }
 
+heap* heapify(int* val, int len, int type)
+{
+        heap* h;
+        int i,j, *arr;
+        i=(len-2)/2;
+        //Initialising the heap
+        h=initheap(type);
+        arr=h->val;
+        memcpy(arr,val,sizeof(int)*len); //copies values of array to heap
+        h->len=len;
+        printheap(h);
+        while(i>=0)
+        {
+                j=i;
+                while(j<=(len-2)/2) // if value at j contains a child pointer
+                {
+                        //Generic construct of heapify
+                        // if(j == (len-2)/2 && j%2 == 0)// if it has only 1 child pointer
+                        // {
+                        //   if(*(arr+j) compare *(arr+len-1))
+                        //     __swap(arr+len-1,arr+j);
+                        //   break;
+                        // }
+                        //
+                        // if(*(arr+2*j+1) compare *(arr+2*j+2))
+                        // {
+                        //   if(*(arr+2*j+1) compare *arr)
+                        //   {
+                        //     __swap(arr,arr+2*j+1);
+                        //     j=2*j+1;
+                        //   }
+                        // }
+                        //
+                        // else
+                        // {
+                        //   if(*(arr+2*j+2) compare *arr)
+                        //   {
+                        //     __swap(arr,arr+2*j+2);
+                        //     j=2*j+2;
+                        //   }
+                        // }
+
+                        if(h->type==MIN_HEAP)
+                        {
+                                if(j == (len-2)/2 && j%2 == 0)// if it has only 1 child pointer
+                                {
+                                        if(*(arr+j) > *(arr+len-1))
+                                                __swap(arr+len-1,arr+j);
+                                        break;
+                                }
+                                if(*(arr+2*j+1) < *(arr+2*j+2))
+                                {
+                                        if(*(arr+2*j+1) < *(arr+j))
+                                                __swap(arr+j,arr+2*j+1);
+                                        j=2*j+1;
+                                }
+                                else
+                                {
+                                        if(*(arr+2*j+2) < *(arr+j))
+                                                __swap(arr+j,arr+2*j+2);
+                                        j=2*j+2;
+                                }
+                        }
+                        else if(h->type==MAX_HEAP)
+                        {
+                                if(j == (len-2)/2 && j%2 == 0)// if it has only 1 child pointer
+                                {
+                                        if(*(arr+j) < *(arr+len-1))
+                                                __swap(arr+len-1,arr+j);
+                                        break;
+                                }
+
+                                if(*(arr+2*j+1) > *(arr+2*j+2))
+                                {
+                                        if(*(arr+2*j+1) > *(arr+j))
+                                                __swap(arr+j,arr+2*j+1);
+                                        j=2*j+1;
+                                }
+                                else
+                                {
+                                        if(*(arr+2*j+2) > *(arr+j))
+                                                __swap(arr+j,arr+2*j+2);
+                                        j=2*j+2;
+
+                                }
+                        }
+                        else{
+                                printf("Error: Invalid type for heap provided as argument. Choose either MAX_HEAP or MIN_HEAP as an argument for heap type");
+                                return NULL;
+                        }
+
+                }
+                i--;
+        }
+        return h;
+}
 
 int add_heap(heap* h, int val)
 {
@@ -73,8 +171,8 @@ int get_heap(heap* h)
         len=h->len;
         if(len<1)
         {
-          printf("Empty heap: Cannot perform get operation.");
-          return ERROR_HEAP;
+                printf("Empty heap: Cannot perform get operation.");
+                return ERROR_HEAP;
         }
         ret=*(arr);
         *arr=*(arr+(h->len)-1);
@@ -88,12 +186,12 @@ int get_heap(heap* h)
                         t1=arr+2*i+1;
                         t2=arr+2*i+2;
                         if(2*i+1>=len-1) //(t1==NULL)
-                          break;
+                                break;
                         else if(2*i+2>=len-1) //(t2==NULL)
                         {
-                          if(*tmp > *t1)
-                                __swap(tmp,t1);
-                          break;
+                                if(*tmp > *t1)
+                                        __swap(tmp,t1);
+                                break;
                         }
                         else if(*t1 < *t2)
                         {
@@ -123,12 +221,12 @@ int get_heap(heap* h)
                         t1=arr+2*i+1;
                         t2=arr+2*i+2;
                         if(2*i+1>=len-1) //(t1==NULL)
-                          break;
+                                break;
                         else if(2*i+2>=len-1) //(t2==NULL)
                         {
-                          if(*tmp < *t1)
-                                  __swap(tmp,t1);
-                          break;
+                                if(*tmp < *t1)
+                                        __swap(tmp,t1);
+                                break;
                         }
                         else if(*t1 > *t2)
                         {

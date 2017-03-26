@@ -12,4 +12,5 @@ heap* initheap(int type);
 void printheap(heap*);
 int add_heap(heap*,int);
 int get_heap(heap*);
+heap* heapify(int* arr,int len,int type); //pointer to array , length of array and type of heap to be formed out of the array
 void __swap(int*,int*);

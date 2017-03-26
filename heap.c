@@ -71,9 +71,9 @@ heap* heapify(int* val, int len, int type)
                         //     j=2*j+2;
                         //   }
                         // }
-
-                        if(h->type==MIN_HEAP)
+                        switch(h->type)
                         {
+                        case MIN_HEAP:
                                 if(j == (len-2)/2 && j%2 == 0)// if it has only 1 child pointer
                                 {
                                         if(*(arr+j) > *(arr+len-1))
@@ -92,9 +92,8 @@ heap* heapify(int* val, int len, int type)
                                                 __swap(arr+j,arr+2*j+2);
                                         j=2*j+2;
                                 }
-                        }
-                        else if(h->type==MAX_HEAP)
-                        {
+                                break;
+                        case MAX_HEAP:
                                 if(j == (len-2)/2 && j%2 == 0)// if it has only 1 child pointer
                                 {
                                         if(*(arr+j) < *(arr+len-1))
@@ -113,10 +112,9 @@ heap* heapify(int* val, int len, int type)
                                         if(*(arr+2*j+2) > *(arr+j))
                                                 __swap(arr+j,arr+2*j+2);
                                         j=2*j+2;
-
                                 }
-                        }
-                        else{
+                                break;
+                        default:
                                 printf("Error: Invalid type for heap provided as argument. Choose either MAX_HEAP or MIN_HEAP as an argument for heap type");
                                 return NULL;
                         }
@@ -138,26 +136,28 @@ int add_heap(heap* h, int val)
         arr=h->val;
         *(arr+h->len)=val; //Setting the value of last element to the new element
         i=h->len; //Used to store current iteration values
-        if(h->type == MAX_HEAP)
+        switch(h->type)
         {
+
+        case MAX_HEAP:
                 while(i>0 && *(t1=(arr+i)) > *(t2=arr+(i-1)/2))
                 {
                         __swap(t1,t2);
                         i=(i-1)/2;
                 }
-        }
-        else if(h->type == MIN_HEAP)
-        {
+                break;
+        case MIN_HEAP:
                 while(i>0 && *(t1=(arr+i)) < *(t2=arr+(i-1)/2))
                 {
                         __swap(t1,t2);
                         i=(i-1)/2;
                 }
-        }
-        else{
+                break;
+        default:
                 printf("Error: Make sure you have initialised heap using initheap()");
                 return -1;
         }
+
         h->len++;
         return 0;
 }
